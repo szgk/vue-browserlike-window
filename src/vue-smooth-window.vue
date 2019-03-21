@@ -226,7 +226,7 @@ $gleen = rgb(38, 188, 46)
 $black = rgba(0, 0, 0, 0.4)
 $grey = #888
 $midGrey = #ddd
-$lightGrey = rgb(231, 234, 237)
+$lightGrey = #eee
 $selectBulue = rgba(0, 237, 255, 0.1)
 
 $smallBarSize = 10px
