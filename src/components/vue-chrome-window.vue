@@ -33,7 +33,7 @@
       <div
         class="vue-chrome-window__left_bar"
         :style="{
-          height: height + (isMax ? 'vh': 'px')
+          height: sizeY + (isMax ? 'vh': 'px')
         }"
         @mousedown="dragstart($event)"
         @mousemove="scale($event, 'w')"
@@ -49,8 +49,8 @@
         <div
           id="vue-chrome-window__content"
           :style="{
-            height: height + (isMax ? 'vh': 'px'),
-            width: width + (isMax ? 'vw': 'px'),
+            height: sizeY + (isMax ? 'vh': 'px'),
+            width: sizeX + (isMax ? 'vw': 'px'),
             margin: '0 auto'
           }"
         >
@@ -68,17 +68,6 @@
               <button @click.stop="clickMaxButton()" class="vue-chrome-window__scale" />
             </div>
 
-            <!-- <div
-              class="vue-chrome-window__move_handle"
-              v-if="isMin"
-            >
-              <div>
-                <span/>
-                <span/>
-                <span/>
-              </div>
-            </div> -->
-
             <ul
               v-if="isTab"
               class="vue-chrome-window__tab_headers"
@@ -93,7 +82,6 @@
               </li>
             </ul>
           </div>
-
           <div
             v-if="isTab"
             class="vue-chrome-window__tab_item_wrapper"
@@ -101,15 +89,14 @@
             <slot name="tabs" :active="active"/>
           </div>
           <div v-else>
-            <slot :active="activeTab"> x:{{x}} y:{{y}} </slot>
+            <slot :active="activeTab" />
           </div>
-
           </div>
         </div>
         <div
           class="vue-chrome-window__right_bar"
           :style="{
-            height: height + (isMax ? 'vh': 'px')
+            height: sizeY + (isMax ? 'vh': 'px')
           }"
           @mousedown="dragstart($event)"
           @mousemove="scale($event, 'e')"
@@ -150,7 +137,6 @@
   export default {
     data () {
       return {
-        rect: {},
         dragStart: {},
         startPositoin: {},
         startSize: {},
@@ -159,14 +145,14 @@
         x: 0,
         y: 0,
         open: true,
+        sizeX: this.width,
+        sizeY: this.height,
         cache: {
-          height: 400,
-          width: 400,
+          sizeY: this.height,
+          sizeX: this.width,
           x: 0,
           y: 0,
         },
-        height: 400,
-        width: 400,
         isTab: false,
         items: [],
         isMin: false,
@@ -186,8 +172,8 @@
            y: this.y
         }
         this.startSize = {
-           h: this.height,
-           w: this.width
+           h: this.sizeY,
+           w: this.sizeX
         }
         this.draggable = true
       },
@@ -207,51 +193,49 @@
         if (!this.draggable || !this.resizable) return
         const move = this.getMove(e.pageX, e.pageY)
         const minWidth = 120
-        const minHeight = 30
-        console.log(this.height, this.width)
-        console.log(move.x, move.y)
+        const minHeight = 40
         switch(direction) {
           case 'n':
-            this.height = this.startSize.h - move.y
-            if(this.height < minHeight) return
+            this.sizeY = this.startSize.h - move.y
+            if(this.sizeY < minHeight) return
             this.y = this.startPosition.y + move.y
             break
           case 's':
-            this.height = this.startSize.h + move.y
+            this.sizeY = this.startSize.h + move.y
             break
           case 'e':
-            this.width = this.startSize.w + move.x
+            this.sizeX = this.startSize.w + move.x
             break
           case 'w':
             if(this.startSize.w - move.x < minWidth) return
             this.x = this.startPosition.x + move.x
-            this.width = this.startSize.w - move.x
+            this.sizeX = this.startSize.w - move.x
             break
           case 'ne':
-            this.height = this.startSize.h - move.y
-            if(this.height > minHeight)
+            this.sizeY = this.startSize.h - move.y
+            if(this.sizeY > minHeight)
               this.y = this.startPosition.y + move.y
             if(this.startSize.w + move.x > minWidth) {
-              this.width = this.startSize.w + move.x
+              this.sizeX = this.startSize.w + move.x
             }
             break
           case 'nw':
-            this.height = this.startSize.h - move.y
-            if(this.height > minHeight)
+            this.sizeY = this.startSize.h - move.y
+            if(this.sizeY > minHeight)
               this.y = this.startPosition.y + move.y
-            this.width = this.startSize.w - move.x
-            if(this.width > minWidth)
+            this.sizeX = this.startSize.w - move.x
+            if(this.sizeX > minWidth)
               this.x = this.startPosition.x + move.x
             break
           case 'se':
-            this.height = this.startSize.h + move.y
-            this.width = this.startSize.w + move.x
+            this.sizeY = this.startSize.h + move.y
+            this.sizeX = this.startSize.w + move.x
             break
           case 'sw':
-            this.width = this.startSize.w - move.x
-            if(this.width > minWidth)
+            this.sizeX = this.startSize.w - move.x
+            if(this.sizeX > minWidth)
               this.x = this.startPosition.x + move.x
-            this.height = this.startSize.h + move.y
+            this.sizeY = this.startSize.h + move.y
             break
         }
       },
@@ -271,27 +255,25 @@
         this.$slots.tabs = slots
       },
       clickTab: function(num: number) {
-        console.log('click activeTab', num)
         this.activeTab = num
-        this.createTabSlots()
       },
       caching() {
-        this.cache.width = this.width
-        this.cache.height = this.height
+        this.cache.width = this.sizeX
+        this.cache.height = this.sizeY
         this.cache.x = this.x
         this.cache.y = this.y
       },
       applyCache() {
-        this.width = this.cache.width
-        this.height = this.cache.height
+        this.sizeX = this.cache.width
+        this.sizeY = this.cache.height
         this.x = this.cache.x
         this.y = this.cache.y
       },
       clickMinButton() {
         if(!this.isMin) {
           this.caching()
-          this.width = 0
-          this.height = 0
+          this.sizeX = 0
+          this.sizeY = 0
           this.isMin = true
           this.isMax = false
           this.resizable = true
@@ -307,8 +289,8 @@
           this.isMax = true
           this.isMin = false
           this.resizable = false
-          this.width = 100
-          this.height = 100
+          this.sizeX = 100
+          this.sizeY = 100
           this.x = 0
           this.y = 0
         } else {
@@ -326,7 +308,15 @@
     props: {
       value: {
         type: Boolean,
-        required: true
+        default: false
+      },
+      height: {
+        type: Number,
+        default: 400
+      },
+      width: {
+        type: Number,
+        default: 400
       },
       active: {
         type: Number,
@@ -355,13 +345,17 @@
         this.open = val
       }
     },
-    created () {
+    created() {
+      this.open = this.value
       this.x = this.top
       this.y = this.left
-
       if(this.mode === 'tab') {
         this.isTab = true
         this.activeTab = this.active
+      }
+    },
+    beforeUpdate () {
+      if(this.mode === 'tab') {
         this.createTabSlots()
       }
     }

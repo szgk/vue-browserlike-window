@@ -1,7 +1,7 @@
 <template>
   <div
     class="vue-chrome-window-item"
-    v-if="index === active"
+    v-if="open"
   >
     <slot/>
   </div>
@@ -15,12 +15,12 @@
     data() {
       return {}
     },
-    created() {
-      console.log(this)
-    },
     computed: {
-      active: function () {
+      active: function (): number {
         return this.$parent['activeTab']
+      },
+      open(): boolean {
+        return this.index === this.active
       }
     },
     props: {

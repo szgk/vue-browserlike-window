@@ -1,5 +1,5 @@
 $minWidth = 120px
-$minHeight = 30px
+$minHeight = 40px
 $smallBarSize = 10px
 $scaleBarSize = 200px
 
@@ -9,19 +9,122 @@ $scaleBarSize = 200px
 #vue-chrome-window__content
   min-width: $minWidth
   min-height: $minHeight
-  overflow: hidden
+  overflow: scroll
 .vue-chrome-window__flex
   display: flex
+
+/* navi */
 .vue-chrome-window__navi_bar
   position: relative
   display: flex
   border-radius: 5px 5px 0 0
-  width: calc(100% -2px)
+  width: 100%
+  height: 40px
   margin: 0 auto
-  padding: 5px 0px 0 5px
+  padding: 0 0px 0 10px
   box-sizing: border-box
   background: $lightGrey
   cursor: move
+/* tab */
+ul.vue-chrome-window__tab_headers
+  position: relative
+  bottom: -1px
+  align-self: end
+  display: flex
+  align-items: end
+  list-style: none
+  padding-left: 0
+  height: 40px
+  margin: 0
+  margin-left: 20px
+  background: $lightGrey
+  li
+    position: relative
+    align-self: end
+    z-index: 20
+    border-bottom: none
+    padding: 0 5px 0 5px
+    margin-top: 10px
+    height: 30px
+    box-sizing: border-box
+    background: $lightGrey
+    border-radius: 0 0 5px 5px
+    &.active
+      background: #fff
+      border-radius: 5px 5px 0 0
+
+/* control button */
+.vue-chrome-window__control_buttons
+  display: flex
+  margin-top: 10px
+  button
+    text-align: center
+    vertical-align: middle
+    position: relative
+    width: 15px
+    height: 15px
+    line-height: 10px
+    padding: 0
+    border-radius: 15px
+    cursor: pointer
+    & + button
+      margin-left: 10px
+    &:focus
+      outline:0
+  button.vue-chrome-window__close
+    background: $red
+    &:before
+    &:after
+      content: ''
+      display: block
+      position: absolute
+      height: 2px
+      left: 0
+      right: 0
+      margin: 0 auto
+      border-radius: 2px
+      background: $black
+    &:after
+      top: 6px
+      width: 85%
+      transform: rotate(45deg)
+    &:before
+      bottom: 5.5px
+      width: 83%
+      transform: rotate(-45deg)
+  button.vue-chrome-window__small
+    background: $yellow
+    &:after
+      content: ''
+      display: block
+      postion: absolute
+      width: 80%
+      height: 2px
+      left: 0
+      right: 0
+      margin: 0 auto
+      border-radius: 2px
+      background: $black 
+  button.vue-chrome-window__scale
+    background: $gleen
+    &:before
+    &:after
+      position: absolute
+      display: block
+      margin: 0 auto
+      width: 1px
+      content: ''
+      border-right: 3px solid transparent;
+      border-bottom: 3px solid $black;
+      border-left: 3px solid transparent; 
+    &:after
+      top: 3px
+      right: 1.7px
+      transform: rotate(45deg)
+    &:before
+      bottom: 3px
+      left: 1.1px
+      transform: rotate(-135deg)
 
 /* top, under */
 .vue-chrome-window__top_bar
@@ -117,97 +220,3 @@ $scaleBarSize = 200px
   &:hover
     bottom: - ($scaleBarSize / 2)
     right: - ($scaleBarSize / 2)
-
-/* control button */
-.vue-chrome-window__control_buttons
-  display: flex
-  button
-    text-align: center
-    vertical-align: middle
-    position: relative
-    width: 15px
-    height: 15px
-    line-height: 10px
-    padding: 0
-    border-radius: 15px
-    cursor: pointer
-    & + button
-      margin-left: 10px
-    &:focus
-      outline:0
-  button.vue-chrome-window__close
-    background: $red
-    &:before
-    &:after
-      content: ''
-      display: block
-      position: absolute
-      height: 2px
-      left: 0
-      right: 0
-      margin: 0 auto
-      border-radius: 2px
-      background: $black
-    &:after
-      top: 6px
-      width: 85%
-      transform: rotate(45deg)
-    &:before
-      bottom: 5.5px
-      width: 83%
-      transform: rotate(-45deg)
-  button.vue-chrome-window__small
-    background: $yellow
-    &:after
-      content: ''
-      display: block
-      postion: absolute
-      width: 80%
-      height: 2px
-      left: 0
-      right: 0
-      margin: 0 auto
-      border-radius: 2px
-      background: $black 
-  button.vue-chrome-window__scale
-    background: $gleen
-    &:before
-    &:after
-      position: absolute
-      display: block
-      margin: 0 auto
-      width: 1px
-      content: ''
-      border-right: 3px solid transparent;
-      border-bottom: 3px solid $black;
-      border-left: 3px solid transparent; 
-    &:after
-      top: 3px
-      right: 1.7px
-      transform: rotate(45deg)
-    &:before
-      bottom: 3px
-      left: 1.1px
-      transform: rotate(-135deg)
-
-/* tab */
-ul.vue-chrome-window__tab_headers
-  position: relative
-  bottom: -1px
-  align-self: end
-  display: flex
-  list-style: none
-  padding-left: 0
-  margin: 0
-  margin-left: 20px
-  li
-    position: relative
-    z-index: 20
-    border-bottom: none
-    padding: 0 5px 0 5px
-    box-sizing: border-box
-    background: $lightGrey
-    border-radius: 0 0 5px 5px
-    &.active
-      background: #fff
-      border-radius: 5px 5px 0 0
