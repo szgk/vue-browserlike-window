@@ -60,12 +60,12 @@
             @mouseup="dragend($event)"
             @mousemove="dragmove($event)"
             @mouseout="dragend($event)"
-            @dblclick="clickMaxButton()"
+            @dblclick.self="clickMaxButton()"
           >
             <div class="vue-smart-window__control_buttons">
-              <button @click="clickCloseButton()" class="vue-smart-window__close" />
-              <button @click="clickMinButton()" class="vue-smart-window__small" />
-              <button @click="clickMaxButton()" class="vue-smart-window__scale" />
+              <button @click.stop="clickCloseButton()" class="vue-smart-window__close" />
+              <button @click.stop="clickMinButton()" class="vue-smart-window__small" />
+              <button @click.stop="clickMaxButton()" class="vue-smart-window__scale" />
             </div>
 
             <!-- <div
@@ -275,29 +275,35 @@
         this.activeTab = num
         this.createTabSlots()
       },
+      caching() {
+        this.cache.width = this.width
+        this.cache.height = this.height
+        this.cache.x = this.x
+        this.cache.y = this.y
+      },
       applyCache() {
         this.width = this.cache.width
         this.height = this.cache.height
         this.x = this.cache.x
         this.y = this.cache.y
-        this.isMin = false
-        this.isMax = false
       },
       clickMinButton() {
-        this.cache.width = this.width
-        this.cache.height = this.height
-        this.width = 0
-        this.height = 0
-        this.isMin = true
-        this.isMax = false
-        this.resizable = true
+        if(!this.isMin) {
+          this.caching()
+          this.width = 0
+          this.height = 0
+          this.isMin = true
+          this.isMax = false
+          this.resizable = true
+        } else {
+          this.isMin = false
+          this.isMax = false
+          this.applyCache()
+        }
       },
       clickMaxButton() {
         if(!this.isMax) {
-          this.cache.width = this.width
-          this.cache.height = this.height
-          this.cache.x = this.x
-          this.cache.y = this.y
+          this.caching()
           this.isMax = true
           this.isMin = false
           this.resizable = false
@@ -306,6 +312,8 @@
           this.x = 0
           this.y = 0
         } else {
+          this.isMin = false
+          this.isMax = false
           this.applyCache()
           this.resizable = true
         }
