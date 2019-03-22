@@ -33,7 +33,7 @@
       <div
         class="vue-smart-window__left_bar"
         :style="{
-          height: height + 'px'
+          height: height + (isMax ? 'vh': 'px')
         }"
         @mousedown="dragstart($event)"
         @mousemove="scale($event, 'w')"
@@ -47,10 +47,10 @@
         }"
       >
         <div
-          id="vue-smart-window__content"
+          id="vue-smooth-window__content"
           :style="{
-            height: (height - 1) + 'px',
-            width: (width - 1) + 'px',
+            height: height + (isMax ? 'vh': 'px'),
+            width: width + (isMax ? 'vw': 'px'),
             margin: '0 auto'
           }"
         >
@@ -60,24 +60,56 @@
             @mouseup="dragend($event)"
             @mousemove="dragmove($event)"
             @mouseout="dragend($event)"
+            @dblclick="clickMaxButton()"
           >
             <div class="vue-smart-window__control_buttons">
-              <button class="vue-smart-window__close" />
-              <button class="vue-smart-window__small" />
-              <button class="vue-smart-window__scale" />
+              <button @click="clickCloseButton()" class="vue-smart-window__close" />
+              <button @click="clickMinButton()" class="vue-smart-window__small" />
+              <button @click="clickMaxButton()" class="vue-smart-window__scale" />
             </div>
-          </div>
-          {{x}}
-          {{y}}
 
-          <slot/>
+            <!-- <div
+              class="vue-smart-window__move_handle"
+              v-if="isMin"
+            >
+              <div>
+                <span/>
+                <span/>
+                <span/>
+              </div>
+            </div> -->
+
+            <ul
+              v-if="isTab"
+              class="vue-smart-window__tab_headers"
+            >
+              <li
+                v-for="(tab, index) in tabs"
+                :key="tab+index"
+                :class="{active: activeTab === index}"
+                @click="clickTab(index)"
+              >
+                {{tab}}
+              </li>
+            </ul>
+          </div>
+
+          <div
+            v-if="isTab"
+            class="vue-smart-window__tab_item_wrapper"
+          >
+            <slot name="tabs" :active="active"/>
+          </div>
+          <div v-else>
+            <slot :active="activeTab"> x:{{x}} y:{{y}} </slot>
+          </div>
 
           </div>
         </div>
         <div
           class="vue-smart-window__right_bar"
           :style="{
-            height: height + 'px'
+            height: height + (isMax ? 'vh': 'px')
           }"
           @mousedown="dragstart($event)"
           @mousemove="scale($event, 'e')"
@@ -112,6 +144,7 @@
 </template>
 
 <script lang="ts">
+  import {VNode} from 'vue'
   type Direction = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw'
 
   export default {
@@ -122,15 +155,28 @@
         startPositoin: {},
         startSize: {},
         draggable: false,
+        resizable: true,
         x: 0,
         y: 0,
         open: true,
+        cache: {
+          height: 400,
+          width: 400,
+          x: 0,
+          y: 0,
+        },
         height: 400,
-        width: 400
+        width: 400,
+        isTab: false,
+        items: [],
+        isMin: false,
+        isMax: false,
+        activeTab: {},
       }
     },
     methods: {
       dragstart: function(e) {
+        if(this.isMax) return
         this.dragStart = {
            x: e.pageX,
            y: e.pageY
@@ -146,24 +192,29 @@
         this.draggable = true
       },
       dragend: function(e) {
+        if(this.isMax) return
         this.draggable = false
         const dragEnd = { x: e.pageX, y: e.pageY }
       },
       dragmove: function(e) {
-        if (!this.draggable) return
+        if (!this.draggable || this.isMax) return
         const {x: startX, y: startY} = this.dragStart
         const move = this.getMove(e.pageX,e.pageY)
         this.x = this.startPosition.x + move.x
         this.y = this.startPosition.y + move.y
       },
       scale: function(e: MouseEvent, direction: Direction) {
-        if (!this.draggable) return
+        if (!this.draggable || !this.resizable) return
         const move = this.getMove(e.pageX, e.pageY)
-
+        const minWidth = 120
+        const minHeight = 30
+        console.log(this.height, this.width)
+        console.log(move.x, move.y)
         switch(direction) {
           case 'n':
-            this.y = this.startPosition.y + move.y
             this.height = this.startSize.h - move.y
+            if(this.height < minHeight) return
+            this.y = this.startPosition.y + move.y
             break
           case 's':
             this.height = this.startSize.h + move.y
@@ -172,27 +223,34 @@
             this.width = this.startSize.w + move.x
             break
           case 'w':
+            if(this.startSize.w - move.x < minWidth) return
             this.x = this.startPosition.x + move.x
             this.width = this.startSize.w - move.x
             break
           case 'ne':
-            this.y = this.startPosition.y + move.y
             this.height = this.startSize.h - move.y
-            this.width = this.startSize.w + move.x
+            if(this.height > minHeight)
+              this.y = this.startPosition.y + move.y
+            if(this.startSize.w + move.x > minWidth) {
+              this.width = this.startSize.w + move.x
+            }
             break
           case 'nw':
-            this.y = this.startPosition.y + move.y
             this.height = this.startSize.h - move.y
-            this.x = this.startPosition.x + move.x
+            if(this.height > minHeight)
+              this.y = this.startPosition.y + move.y
             this.width = this.startSize.w - move.x
+            if(this.width > minWidth)
+              this.x = this.startPosition.x + move.x
             break
           case 'se':
             this.height = this.startSize.h + move.y
             this.width = this.startSize.w + move.x
             break
           case 'sw':
-            this.x = this.startPosition.x + move.x
             this.width = this.startSize.w - move.x
+            if(this.width > minWidth)
+              this.x = this.startPosition.x + move.x
             this.height = this.startSize.h + move.y
             break
         }
@@ -200,12 +258,89 @@
       getMove: function(x,y) {
         const {x: startX, y: startY} = this.dragStart
         return { x: x - startX, y: y - startY }
+      },
+      createTabSlots: function() {
+        let index = 0
+        const slots = this.$slots.default.filter((slot: VNode) => {
+          if(slot.tag && slot.tag.match(/vue-smooth-window-item/g)) {
+            slot.componentOptions.propsData = {index}
+            index++
+            return slot
+          }
+        })
+        this.$slots.tabs = slots
+      },
+      clickTab: function(num: number) {
+        console.log('click activeTab', num)
+        this.activeTab = num
+        this.createTabSlots()
+      },
+      applyCache() {
+        this.width = this.cache.width
+        this.height = this.cache.height
+        this.x = this.cache.x
+        this.y = this.cache.y
+        this.isMin = false
+        this.isMax = false
+      },
+      clickMinButton() {
+        this.cache.width = this.width
+        this.cache.height = this.height
+        this.width = 0
+        this.height = 0
+        this.isMin = true
+        this.isMax = false
+        this.resizable = true
+      },
+      clickMaxButton() {
+        if(!this.isMax) {
+          this.cache.width = this.width
+          this.cache.height = this.height
+          this.cache.x = this.x
+          this.cache.y = this.y
+          this.isMax = true
+          this.isMin = false
+          this.resizable = false
+          this.width = 100
+          this.height = 100
+          this.x = 0
+          this.y = 0
+        } else {
+          this.applyCache()
+          this.resizable = true
+        }
+      },
+      clickCloseButton() {
+        this.open = false
+        this.$emit('close')
       }
     },
     props: {
-      value: Boolean,
-      top: Number,
-      left: Number
+      value: {
+        type: Boolean,
+        required: true
+      },
+      active: {
+        type: Number,
+        required: true,
+        default: 0
+      },
+      top: {
+        type: Number,
+        default: 100
+      },
+      left: {
+        type: Number,
+        default: 100
+      },
+      mode: {
+        type: String,
+        default: ''
+      },
+      tabs: {
+        type: Array,
+        default: () => []
+      }
     },
     watch: {
       value: function(val: boolean) {
@@ -215,216 +350,17 @@
     created () {
       this.x = this.top
       this.y = this.left
+
+      if(this.mode === 'tab') {
+        this.isTab = true
+        this.activeTab = this.active
+        this.createTabSlots()
+      }
     }
   }
 </script>
 
 <style lang="stylus">
-$red = rgb(245, 68, 68)
-$yellow = rgb(253, 181, 37)
-$gleen = rgb(38, 188, 46)
-$black = rgba(0, 0, 0, 0.4)
-$grey = #888
-$midGrey = #ddd
-$lightGrey = #eee
-$selectBulue = rgba(0, 237, 255, 0.1)
-
-$smallBarSize = 10px
-$scaleBarSize = 200px
-
-#vue-smart-window
-  border-radius: 5px
-  border: 1px solid $midGrey
-#vue-smart-window__content
-  padding: 0 1px
-.vue-smart-window__flex
-  display: flex
-.vue-smart-window__navi_bar
-  display: flex
-  border-radius: 5px 5px 0 0
-  width: calc(100% -2px)
-  margin: 0 auto
-  height: 30px
-  padding: 5px 10px
-  box-sizing: border-box
-  background: $lightGrey
-  cursor: move
-
-/* all bar (for debug)*/
-// .vue-smart-window__top_bar
-// .vue-smart-window__under_bar
-// .vue-smart-window__left_bar
-// .vue-smart-window__right_bar
-// .vue-smart-window__corner_ne
-// .vue-smart-window__corner_nw
-// .vue-smart-window__corner_se
-// .vue-smart-window__corner_sw
-//   transition: width 0.4s ease 0, height 0.4s ease 0,
-//   &:hover
-//     background: $selectBulue
-//     box-shadow: 0 0 10px $selectBulue
-
-/* top, under */
-.vue-smart-window__top_bar
-.vue-smart-window__under_bar
-  position: absolute
-  left: 0
-  right: 0
-  height: $smallBarSize
-  margin: 0 auto
-  cursor: row-resize
-.vue-smart-window__top_bar
-  top: - $smallBarSize
-.vue-smart-window__top_bar
-  &:hover
-    top: - ($scaleBarSize / 2)
-    height: $scaleBarSize
-.vue-smart-window__top_bar
-  bottom: 0
-.vue-smart-window__under_bar
-  &:hover
-    height: $scaleBarSize
-    bottom: - ($scaleBarSize / 2)
-
-/* left, right */
-.vue-smart-window__left_bar
-.vue-smart-window__right_bar
-  position: absolute
-  top: 0
-  width: $smallBarSize
-  cursor: col-resize
-.vue-smart-window__left_bar
-  left: - $smallBarSize
-.vue-smart-window__right_bar
-  right: - $smallBarSize
-.vue-smart-window__left_bar
-  &:hover
-    width: $scaleBarSize
-    left: - ($scaleBarSize / 2)
-.vue-smart-window__right_bar
-  &:hover
-    width: $scaleBarSize
-    right: - ($scaleBarSize / 2)
-
-/* corner */
-.vue-smart-window__corner_ne
-.vue-smart-window__corner_nw
-.vue-smart-window__corner_se
-.vue-smart-window__corner_sw
-  position: absolute
-  z-index: 200
-  width: $smallBarSize
-  height: $smallBarSize
-.vue-smart-window__corner_nw
-.vue-smart-window__corner_ne
-.vue-smart-window__corner_se
-.vue-smart-window__corner_sw
-  &:hover
-    height: $scaleBarSize
-    width: $scaleBarSize
-.vue-smart-window__corner_nw
-  top: - $smallBarSize
-  left: - $smallBarSize
-  cursor: nw-resize
-.vue-smart-window__corner_nw
-  &:hover
-    left: - ($scaleBarSize / 2)
-    top: - ($scaleBarSize / 2)
-    height: $scaleBarSize
-    width: $scaleBarSize
-.vue-smart-window__corner_ne
-  top: - $smallBarSize
-  right: - $smallBarSize
-  cursor: ne-resize
-.vue-smart-window__corner_ne
-  &:hover
-    right: - ($scaleBarSize / 2)
-    top: - ($scaleBarSize / 2)
-    height: $scaleBarSize
-    width: $scaleBarSize
-.vue-smart-window__corner_sw
-  bottom: - $smallBarSize
-  left: - $smallBarSize
-  cursor: sw-resize
-.vue-smart-window__corner_se
-  bottom: - $smallBarSize
-  right: - $smallBarSize
-  cursor: se-resize
-.vue-smart-window__corner_sw
-  &:hover
-    bottom: - ($scaleBarSize / 2)
-    left: - ($scaleBarSize / 2)
-.vue-smart-window__corner_se
-  &:hover
-    bottom: - ($scaleBarSize / 2)
-    right: - ($scaleBarSize / 2)
-
-/* control button */
-.vue-smart-window__control_buttons
-  display: flex
-  button
-    text-align: center
-    vertical-align: middle
-    position: relative
-    width: 15px
-    height: 15px
-    line-height: 10px
-    padding: 0
-    border-radius: 15px
-    & + button
-      margin-left: 10px
-  button.vue-smart-window__close
-    background: $red
-    &:before
-    &:after
-      content: ''
-      display: block
-      position: absolute
-      height: 2px
-      left: 0
-      right: 0
-      margin: 0 auto
-      border-radius: 2px
-      background: $black
-    &:after
-      top: 6px
-      width: 85%
-      transform: rotate(45deg)
-    &:before
-      bottom: 5.5px
-      width: 83%
-      transform: rotate(-45deg)
-  button.vue-smart-window__small
-    background: $yellow
-    &:after
-      content: ''
-      display: block
-      postion: absolute
-      width: 80%
-      height: 2px
-      left: 0
-      right: 0
-      margin: 0 auto
-      border-radius: 2px
-      background: $black 
-  button.vue-smart-window__scale
-    background: $gleen
-    &:before
-    &:after
-      position: absolute
-      display: block
-      margin: 0 auto
-      width: 1px
-      content: ''
-      border-right: 3px solid transparent;
-      border-bottom: 3px solid $black;
-      border-left: 3px solid transparent; 
-    &:after
-      top: 3px
-      right: 1.7px
-      transform: rotate(45deg)
-    &:before
-      bottom: 3px
-      left: 1.1px
-      transform: rotate(-135deg)
+@import './variables'
+@import './window'
 </style>

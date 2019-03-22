@@ -1,0 +1,269 @@
+$minWidth = 120px
+$minHeight = 30px
+$smallBarSize = 10px
+$scaleBarSize = 200px
+
+#vue-smart-window
+  border-radius: 5px
+  border: 1px solid $midGrey
+#vue-smooth-window__content
+  min-width: $minWidth
+  min-height: $minHeight
+  overflow: hidden
+.vue-smart-window__flex
+  display: flex
+.vue-smart-window__navi_bar
+  position: relative
+  display: flex
+  border-radius: 5px 5px 0 0
+  width: calc(100% -2px)
+  margin: 0 auto
+  padding: 5px 0px 0 5px
+  box-sizing: border-box
+  background: $lightGrey
+  cursor: move
+
+/* all bar (for debug)*/
+// .vue-smart-window__top_bar
+// .vue-smart-window__under_bar
+// .vue-smart-window__left_bar
+// .vue-smart-window__right_bar
+// .vue-smart-window__corner_ne
+// .vue-smart-window__corner_nw
+// .vue-smart-window__corner_se
+// .vue-smart-window__corner_sw
+//   transition: width 0.4s ease 0, height 0.4s ease 0,
+//   &:hover
+//     background: $selectBulue
+//     box-shadow: 0 0 10px $selectBulue
+
+/* top, under */
+.vue-smart-window__top_bar
+.vue-smart-window__under_bar
+  position: absolute
+  left: 0
+  right: 0
+  height: $smallBarSize
+  margin: 0 auto
+  cursor: row-resize
+.vue-smart-window__top_bar
+  top: - $smallBarSize
+.vue-smart-window__top_bar
+  &:hover
+    top: - ($scaleBarSize / 2)
+    height: $scaleBarSize
+.vue-smart-window__top_bar
+  bottom: 0
+.vue-smart-window__under_bar
+  &:hover
+    height: $scaleBarSize
+    bottom: - ($scaleBarSize / 2)
+
+/* left, right */
+.vue-smart-window__left_bar
+.vue-smart-window__right_bar
+  position: absolute
+  top: 0
+  width: $smallBarSize
+  cursor: col-resize
+.vue-smart-window__left_bar
+  left: - $smallBarSize
+.vue-smart-window__right_bar
+  right: - $smallBarSize
+.vue-smart-window__left_bar
+  &:hover
+    width: $scaleBarSize
+    left: - ($scaleBarSize / 2)
+.vue-smart-window__right_bar
+  &:hover
+    width: $scaleBarSize
+    right: - ($scaleBarSize / 2)
+
+/* corner */
+.vue-smart-window__corner_ne
+.vue-smart-window__corner_nw
+.vue-smart-window__corner_se
+.vue-smart-window__corner_sw
+  position: absolute
+  z-index: 200
+  width: $smallBarSize
+  height: $smallBarSize
+.vue-smart-window__corner_nw
+.vue-smart-window__corner_ne
+.vue-smart-window__corner_se
+.vue-smart-window__corner_sw
+  &:hover
+    height: $scaleBarSize
+    width: $scaleBarSize
+.vue-smart-window__corner_nw
+  top: - $smallBarSize
+  left: - $smallBarSize
+  cursor: nw-resize
+.vue-smart-window__corner_nw
+  &:hover
+    left: - ($scaleBarSize / 2)
+    top: - ($scaleBarSize / 2)
+    height: $scaleBarSize
+    width: $scaleBarSize
+.vue-smart-window__corner_ne
+  top: - $smallBarSize
+  right: - $smallBarSize
+  cursor: ne-resize
+.vue-smart-window__corner_ne
+  &:hover
+    right: - ($scaleBarSize / 2)
+    top: - ($scaleBarSize / 2)
+    height: $scaleBarSize
+    width: $scaleBarSize
+.vue-smart-window__corner_sw
+  bottom: - $smallBarSize
+  left: - $smallBarSize
+  cursor: sw-resize
+.vue-smart-window__corner_se
+  bottom: - $smallBarSize
+  right: - $smallBarSize
+  cursor: se-resize
+.vue-smart-window__corner_sw
+  &:hover
+    bottom: - ($scaleBarSize / 2)
+    left: - ($scaleBarSize / 2)
+.vue-smart-window__corner_se
+  &:hover
+    bottom: - ($scaleBarSize / 2)
+    right: - ($scaleBarSize / 2)
+
+/* control button */
+.vue-smart-window__control_buttons
+  display: flex
+  button
+    text-align: center
+    vertical-align: middle
+    position: relative
+    width: 15px
+    height: 15px
+    line-height: 10px
+    padding: 0
+    border-radius: 15px
+    & + button
+      margin-left: 10px
+  button.vue-smart-window__close
+    background: $red
+    &:before
+    &:after
+      content: ''
+      display: block
+      position: absolute
+      height: 2px
+      left: 0
+      right: 0
+      margin: 0 auto
+      border-radius: 2px
+      background: $black
+    &:after
+      top: 6px
+      width: 85%
+      transform: rotate(45deg)
+    &:before
+      bottom: 5.5px
+      width: 83%
+      transform: rotate(-45deg)
+  button.vue-smart-window__small
+    background: $yellow
+    &:after
+      content: ''
+      display: block
+      postion: absolute
+      width: 80%
+      height: 2px
+      left: 0
+      right: 0
+      margin: 0 auto
+      border-radius: 2px
+      background: $black 
+  button.vue-smart-window__scale
+    background: $gleen
+    &:before
+    &:after
+      position: absolute
+      display: block
+      margin: 0 auto
+      width: 1px
+      content: ''
+      border-right: 3px solid transparent;
+      border-bottom: 3px solid $black;
+      border-left: 3px solid transparent; 
+    &:after
+      top: 3px
+      right: 1.7px
+      transform: rotate(45deg)
+    &:before
+      bottom: 3px
+      left: 1.1px
+      transform: rotate(-135deg)
+
+/* move handle */
+// .extend_dot_class
+//   content: ''
+//   position: absolute
+//   display: block
+//   width: 3px
+//   height: 3px
+//   border-radius: 3px
+//   background: $grey
+//   margin: 0 auto
+// .vue-smart-window__move_handle
+//   position: relative
+//   z-index: 900
+//   margin: 0 15px
+//   cursor: move
+
+//   span:nth-child(1)
+//     &:after
+//       @extend .extend_dot_class
+//       top: 0
+//       left: 0
+//     &:before
+//       @extend .extend_dot_class
+//       top: 0
+//       left: 10px
+//   span:nth-child(2)
+//     &:after
+//       @extend .extend_dot_class
+//       top: 7px
+//       left: 0
+//     &:before
+//       @extend .extend_dot_class
+//       top: 7px
+//       left: 10px
+//   span:nth-child(3)
+//     &:after
+//       @extend .extend_dot_class
+//       top: 14px
+//       left: 0
+//     &:before
+//       @extend .extend_dot_class
+//       top: 14px
+//       left: 10px
+
+/* tab */
+ul.vue-smart-window__tab_headers
+  position: relative
+  bottom: -1px
+  align-self: end
+  display: flex
+  list-style: none
+  padding-left: 0
+  margin: 0
+  margin-left: 20px
+  width: 100%
+  li
+    position: relative
+    z-index: 20
+    border-bottom: none
+    padding: 0 5px 0 5px
+    box-sizing: border-box
+    background: $lightGrey
+    border-radius: 0 0 5px 5px
+    &.active
+      background: #fff
+      border-radius: 5px 5px 0 0
