@@ -1,6 +1,6 @@
 <template>
 <div>
-  <smooth-window
+  <v-chrome-window
     v-model="open"
     @close="open = false"
     :top="100"
@@ -9,16 +9,15 @@
     :tabs="['tab1', 'tab2', 'tab3']"
     mode="tab"
   >
-    <smooth-window-item>items1</smooth-window-item>
-    <smooth-window-item>items2</smooth-window-item>
-  </smooth-window>
+    <v-chrome-window-item>item1</v-chrome-window-item>
+    <v-chrome-window-item>item2</v-chrome-window-item>
+    <v-chrome-window-item>item3</v-chrome-window-item>
+  </v-chrome-window>
   <button @click="onClickButton">{{open ? 'Close' : 'Open'}}</button>
 </div>
 </template>
 
 <script lang="ts">
-  import SmoothWindow from '@/vue-smooth-window.vue'
-  import SmoothWindowItem from '@/vue-smooth-window-item.vue'
   export default {
     data (){
       return {
@@ -29,10 +28,6 @@
       onClickButton: function(){
         this.open = !this.open
       }
-    },
-    components: {
-      'smooth-window': SmoothWindow,
-      'smooth-window-item': SmoothWindowItem
     }
   }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="vue-smooth-window-item"
+    class="vue-chrome-window-item"
     v-if="index === active"
   >
     <slot/>
@@ -8,8 +8,10 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
+
   export default {
-    name: 'vue-smooth-window-item',
+    name: 'vue-chrome-window-item',
     data() {
       return {}
     },
@@ -31,8 +33,4 @@
 </script>
 
 <style lang="stylus">
-@import './variables'
-$smallBarSize = 10px
-$scaleBarSize = 200px
-
 </style>

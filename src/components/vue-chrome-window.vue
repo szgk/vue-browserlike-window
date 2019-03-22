@@ -7,31 +7,31 @@
       background: '#fff'
     }"
   >
-    <div class="vue-smart-window__flex">
-      <div class="vue-smart-window__corner_nw"
+    <div class="vue-chrome-window__flex">
+      <div class="vue-chrome-window__corner_nw"
         @mousedown="dragstart($event)"
         @mousemove="scale($event, 'nw')"
         @mouseup="dragend($event)"
         @mouseout="dragend($event)"
       />
       <div
-        class="vue-smart-window__top_bar"
+        class="vue-chrome-window__top_bar"
         @mousedown="dragstart($event)"
         @mousemove="scale($event, 'n')"
         @mouseup="dragend($event)"
         @mouseout="dragend($event)"
       />
       <div
-        class="vue-smart-window__corner_ne"
+        class="vue-chrome-window__corner_ne"
         @mousedown="dragstart($event)"
         @mousemove="scale($event, 'ne')"
         @mouseup="dragend($event)"
         @mouseout="dragend($event)"
       />
     </div>
-    <div class="vue-smart-window__flex">
+    <div class="vue-chrome-window__flex">
       <div
-        class="vue-smart-window__left_bar"
+        class="vue-chrome-window__left_bar"
         :style="{
           height: height + (isMax ? 'vh': 'px')
         }"
@@ -41,13 +41,13 @@
         @mouseout="dragend($event)"
       />
       <div
-        id="vue-smart-window"
+        id="vue-chrome-window"
         :style="{
           background: '#fff'
         }"
       >
         <div
-          id="vue-smooth-window__content"
+          id="vue-chrome-window__content"
           :style="{
             height: height + (isMax ? 'vh': 'px'),
             width: width + (isMax ? 'vw': 'px'),
@@ -55,21 +55,21 @@
           }"
         >
           <div
-            class="vue-smart-window__navi_bar"
+            class="vue-chrome-window__navi_bar"
             @mousedown="dragstart($event)"
             @mouseup="dragend($event)"
             @mousemove="dragmove($event)"
             @mouseout="dragend($event)"
             @dblclick.self="clickMaxButton()"
           >
-            <div class="vue-smart-window__control_buttons">
-              <button @click.stop="clickCloseButton()" class="vue-smart-window__close" />
-              <button @click.stop="clickMinButton()" class="vue-smart-window__small" />
-              <button @click.stop="clickMaxButton()" class="vue-smart-window__scale" />
+            <div class="vue-chrome-window__control_buttons">
+              <button @click.stop="clickCloseButton()" class="vue-chrome-window__close" />
+              <button @click.stop="clickMinButton()" class="vue-chrome-window__small" />
+              <button @click.stop="clickMaxButton()" class="vue-chrome-window__scale" />
             </div>
 
             <!-- <div
-              class="vue-smart-window__move_handle"
+              class="vue-chrome-window__move_handle"
               v-if="isMin"
             >
               <div>
@@ -81,7 +81,7 @@
 
             <ul
               v-if="isTab"
-              class="vue-smart-window__tab_headers"
+              class="vue-chrome-window__tab_headers"
             >
               <li
                 v-for="(tab, index) in tabs"
@@ -96,7 +96,7 @@
 
           <div
             v-if="isTab"
-            class="vue-smart-window__tab_item_wrapper"
+            class="vue-chrome-window__tab_item_wrapper"
           >
             <slot name="tabs" :active="active"/>
           </div>
@@ -107,7 +107,7 @@
           </div>
         </div>
         <div
-          class="vue-smart-window__right_bar"
+          class="vue-chrome-window__right_bar"
           :style="{
             height: height + (isMax ? 'vh': 'px')
           }"
@@ -117,9 +117,9 @@
           @mouseout="dragend($event)"
         />
     </div>
-    <div class="vue-smart-window__flex">
+    <div class="vue-chrome-window__flex">
       <div 
-        class="vue-smart-window__corner_sw"
+        class="vue-chrome-window__corner_sw"
         @mousedown="dragstart($event)"
         @mousemove="scale($event, 'sw')"
         @mouseup="dragend($event)"
@@ -130,10 +130,10 @@
         @mousemove="scale($event, 's')"
         @mouseup="dragend($event)"
         @mouseout="dragend($event)"
-        class="vue-smart-window__under_bar"
+        class="vue-chrome-window__under_bar"
       />
       <div
-        class="vue-smart-window__corner_se"
+        class="vue-chrome-window__corner_se"
         @mousedown="dragstart($event)"
         @mousemove="scale($event, 'se')"
         @mouseup="dragend($event)"
@@ -144,7 +144,7 @@
 </template>
 
 <script lang="ts">
-  import {VNode} from 'vue'
+  import Vue, {VNode} from 'vue'
   type Direction = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw'
 
   export default {
@@ -262,7 +262,7 @@
       createTabSlots: function() {
         let index = 0
         const slots = this.$slots.default.filter((slot: VNode) => {
-          if(slot.tag && slot.tag.match(/vue-smooth-window-item/g)) {
+          if(slot.tag && slot.tag.match(/vue-chrome-window-item/g)) {
             slot.componentOptions.propsData = {index}
             index++
             return slot
@@ -369,6 +369,6 @@
 </script>
 
 <style lang="stylus">
-@import './variables'
-@import './window'
+@import '../styles/variables'
+@import '../styles/window'
 </style>

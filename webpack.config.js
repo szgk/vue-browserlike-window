@@ -5,7 +5,7 @@ const path = require('path');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
-  entry:{main: './src/main.ts'},
+  entry:{main: './sample/main.ts'},
   devServer: {
     port: 3333,
     contentBase: path.resolve(__dirname, 'dist'),
