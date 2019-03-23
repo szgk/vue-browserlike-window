@@ -1,222 +1,271 @@
+@import '../styles/_variables'
+@import '../styles/_z-index'
+
 $minWidth = 120px
 $minHeight = 40px
 $smallBarSize = 10px
 $scaleBarSize = 200px
 
+ul
+  list-style none
+  padding 0
+  margin 0
+
 #vue-chrome-window
-  border-radius: 5px
-  border: 1px solid $midGrey
+  border-radius 5px
+  border 1px solid $midGrey
 #vue-chrome-window__content
-  min-width: $minWidth
-  min-height: $minHeight
-  overflow: scroll
+  min-width $minWidth
+  min-height $minHeight
+  position relative
+  overflow scroll
 .vue-chrome-window__flex
-  display: flex
+  display flex
 
 /* navi */
 .vue-chrome-window__navi_bar
-  position: relative
-  display: flex
-  border-radius: 5px 5px 0 0
-  width: 100%
-  height: 40px
-  margin: 0 auto
-  padding: 0 0px 0 10px
-  box-sizing: border-box
-  background: $lightGrey
-  cursor: move
+  position relative
+  display flex
+  border-radius 5px 5px 0 0
+  width 100%
+  height 40px
+  margin 0 auto
+  padding 0 0px 0 10px
+  box-sizing border-box
+  background $lightGrey
+  cursor move
 /* tab */
 ul.vue-chrome-window__tab_headers
-  position: relative
-  bottom: -1px
-  align-self: end
-  display: flex
-  align-items: end
-  list-style: none
-  padding-left: 0
-  height: 40px
-  margin: 0
-  margin-left: 20px
-  background: $lightGrey
+  position relative
+  bottom -1px
+  align-self end
+  display flex
+  align-items end
+  padding-left 0
+  height 40px
+  margin 0
+  margin-left 20px
+  background $lightGrey
   li
-    position: relative
-    align-self: end
-    z-index: 20
-    border-bottom: none
-    padding: 0 5px 0 5px
-    margin-top: 10px
-    height: 30px
-    box-sizing: border-box
-    background: $lightGrey
-    border-radius: 0 0 5px 5px
+    position relative
+    align-self end
+    z-index $z_headerTab
+    border-bottom none
+    min-width 50px
+    padding 0 5px 0 5px
+    margin-top 10px
+    height 30px
+    box-sizing border-box
+    background $lightGrey
+    border-radius 0 0 5px 5px
+    overflow hidden
     &.active
-      background: #fff
-      border-radius: 5px 5px 0 0
+      background #fff
+      border-radius 5px 5px 0 0
+
+/* drawer */
+.vue-chrome-window__drower_button
+  position absolute
+  display block
+  z-index $z_drawerButton
+  border none
+  width 30px
+  height 40px
+  line-height 40px
+  font-size 20px
+  padding 0
+  right 0
+  top 0
+  background $lightGrey
+  &:hover
+    background $midGrey
+  &:focus
+    outline 0
+  span
+    display block
+    cursor pointer
+    transition transform 0.1s linear
+.vue-chrome-window__drawer
+  position absolute
+  display block
+  z-index $z_drawer
+  border-radius: 5px
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4)
+  width: 100px
+  right 0
+  top 40px
+  padding: 10px
+  background #fff
+  li
+    overflow: hidden
+    &:hover
+      background: $lightGrey
+      cursor pointer
 
 /* control button */
 .vue-chrome-window__control_buttons
-  display: flex
-  margin-top: 10px
+  display flex
+  margin-top 10px
   button
-    text-align: center
-    vertical-align: middle
-    position: relative
-    width: 15px
-    height: 15px
-    line-height: 10px
-    padding: 0
-    border-radius: 15px
-    cursor: pointer
+    text-align center
+    vertical-align middle
+    position relative
+    width 15px
+    height 15px
+    line-height 10px
+    padding 0
+    border-radius 15px
+    cursor pointer
     & + button
-      margin-left: 10px
+      margin-left 10px
     &:focus
-      outline:0
+      outline 0
   button.vue-chrome-window__close
-    background: $red
+    background $red
     &:before
     &:after
-      content: ''
-      display: block
-      position: absolute
-      height: 2px
-      left: 0
-      right: 0
-      margin: 0 auto
-      border-radius: 2px
-      background: $black
+      content ''
+      display block
+      position absolute
+      height 2px
+      left 0
+      right 0
+      margin 0 auto
+      border-radius 2px
+      background $black
     &:after
-      top: 6px
-      width: 85%
-      transform: rotate(45deg)
+      top 6px
+      width 85%
+      transform rotate(45deg)
     &:before
-      bottom: 5.5px
-      width: 83%
-      transform: rotate(-45deg)
+      bottom 5.5px
+      width 83%
+      transform rotate(-45deg)
   button.vue-chrome-window__small
-    background: $yellow
+    background $yellow
     &:after
-      content: ''
-      display: block
-      postion: absolute
-      width: 80%
-      height: 2px
-      left: 0
-      right: 0
-      margin: 0 auto
-      border-radius: 2px
-      background: $black 
+      content ''
+      display block
+      postion absolute
+      width 80%
+      height 2px
+      left 0
+      right 0
+      margin 0 auto
+      border-radius 2px
+      background $black 
   button.vue-chrome-window__scale
-    background: $gleen
+    background $gleen
     &:before
     &:after
-      position: absolute
-      display: block
-      margin: 0 auto
-      width: 1px
-      content: ''
-      border-right: 3px solid transparent;
-      border-bottom: 3px solid $black;
-      border-left: 3px solid transparent; 
+      position absolute
+      display block
+      margin 0 auto
+      width 1px
+      content ''
+      border-right 3px solid transparent;
+      border-bottom 3px solid $black;
+      border-left 3px solid transparent; 
     &:after
-      top: 3px
-      right: 1.7px
-      transform: rotate(45deg)
+      top 3px
+      right 1.7px
+      transform rotate(45deg)
     &:before
-      bottom: 3px
-      left: 1.1px
-      transform: rotate(-135deg)
+      bottom 3px
+      left 1.1px
+      transform rotate(-135deg)
 
 /* top, under */
 .vue-chrome-window__top_bar
 .vue-chrome-window__under_bar
-  position: absolute
-  left: 0
-  right: 0
-  height: $smallBarSize
-  margin: 0 auto
-  cursor: row-resize
+  position absolute
+  left 0
+  right 0
+  height $smallBarSize
+  margin 0 auto
+  cursor row-resize
 .vue-chrome-window__top_bar
-  top: - $smallBarSize
+  top - $smallBarSize
 .vue-chrome-window__top_bar
   &:hover
-    top: - ($scaleBarSize / 2)
-    height: $scaleBarSize
+    top - ($scaleBarSize / 2)
+    height $scaleBarSize
 .vue-chrome-window__top_bar
-  bottom: 0
+  bottom 0
 .vue-chrome-window__under_bar
   &:hover
-    height: $scaleBarSize
-    bottom: - ($scaleBarSize / 2)
+    height $scaleBarSize
+    bottom - ($scaleBarSize / 2)
 
 /* left, right */
 .vue-chrome-window__left_bar
 .vue-chrome-window__right_bar
-  position: absolute
-  top: 0
-  width: $smallBarSize
-  cursor: col-resize
+  position absolute
+  top 0
+  width $smallBarSize
+  cursor col-resize
 .vue-chrome-window__left_bar
-  left: - $smallBarSize
+  left - $smallBarSize
 .vue-chrome-window__right_bar
-  right: - $smallBarSize
+  right - $smallBarSize
 .vue-chrome-window__left_bar
   &:hover
-    width: $scaleBarSize
-    left: - ($scaleBarSize / 2)
+    width $scaleBarSize
+    left - ($scaleBarSize / 2)
 .vue-chrome-window__right_bar
   &:hover
-    width: $scaleBarSize
-    right: - ($scaleBarSize / 2)
+    width $scaleBarSize
+    right - ($scaleBarSize / 2)
 
 /* corner */
 .vue-chrome-window__corner_ne
 .vue-chrome-window__corner_nw
 .vue-chrome-window__corner_se
 .vue-chrome-window__corner_sw
-  position: absolute
-  z-index: 200
-  width: $smallBarSize
-  height: $smallBarSize
+  position absolute
+  z-index $z_cornerBar
+  width $smallBarSize
+  height $smallBarSize
 .vue-chrome-window__corner_nw
 .vue-chrome-window__corner_ne
 .vue-chrome-window__corner_se
 .vue-chrome-window__corner_sw
   &:hover
-    height: $scaleBarSize
-    width: $scaleBarSize
+    height $scaleBarSize
+    width $scaleBarSize
 .vue-chrome-window__corner_nw
-  top: - $smallBarSize
-  left: - $smallBarSize
-  cursor: nw-resize
+  top - $smallBarSize
+  left - $smallBarSize
+  cursor nw-resize
 .vue-chrome-window__corner_nw
   &:hover
-    left: - ($scaleBarSize / 2)
-    top: - ($scaleBarSize / 2)
-    height: $scaleBarSize
-    width: $scaleBarSize
+    left - ($scaleBarSize / 2)
+    top - ($scaleBarSize / 2)
+    height $scaleBarSize
+    width $scaleBarSize
 .vue-chrome-window__corner_ne
-  top: - $smallBarSize
-  right: - $smallBarSize
-  cursor: ne-resize
+  top - $smallBarSize
+  right - $smallBarSize
+  cursor ne-resize
 .vue-chrome-window__corner_ne
   &:hover
-    right: - ($scaleBarSize / 2)
-    top: - ($scaleBarSize / 2)
-    height: $scaleBarSize
-    width: $scaleBarSize
+    right - ($scaleBarSize / 2)
+    top - ($scaleBarSize / 2)
+    height $scaleBarSize
+    width $scaleBarSize
 .vue-chrome-window__corner_sw
-  bottom: - $smallBarSize
-  left: - $smallBarSize
-  cursor: sw-resize
+  bottom - $smallBarSize
+  left - $smallBarSize
+  cursor sw-resize
 .vue-chrome-window__corner_se
-  bottom: - $smallBarSize
-  right: - $smallBarSize
-  cursor: se-resize
+  bottom - $smallBarSize
+  right - $smallBarSize
+  cursor se-resize
 .vue-chrome-window__corner_sw
   &:hover
-    bottom: - ($scaleBarSize / 2)
-    left: - ($scaleBarSize / 2)
+    bottom - ($scaleBarSize / 2)
+    left - ($scaleBarSize / 2)
 .vue-chrome-window__corner_se
   &:hover
-    bottom: - ($scaleBarSize / 2)
-    right: - ($scaleBarSize / 2)
+    bottom - ($scaleBarSize / 2)
+    right - ($scaleBarSize / 2)

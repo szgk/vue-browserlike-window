@@ -46,51 +46,75 @@
           background: '#fff'
         }"
       >
-        <div
-          id="vue-chrome-window__content"
-          :style="{
-            height: sizeY + (isMax ? 'vh': 'px'),
-            width: sizeX + (isMax ? 'vw': 'px'),
-            margin: '0 auto'
-          }"
-        >
           <div
-            class="vue-chrome-window__navi_bar"
-            @mousedown="dragstart($event)"
-            @mouseup="dragend($event)"
-            @mousemove="dragmove($event)"
-            @mouseout="dragend($event)"
-            @dblclick.self="clickMaxButton()"
+            id="vue-chrome-window__content"
+            :style="{
+              height: sizeY + (isMax ? 'vh': 'px'),
+              width: sizeX + (isMax ? 'vw': 'px'),
+              margin: '0 auto'
+            }"
           >
-            <div class="vue-chrome-window__control_buttons">
-              <button @click.stop="clickCloseButton()" class="vue-chrome-window__close" />
-              <button @click.stop="clickMinButton()" class="vue-chrome-window__small" />
-              <button @click.stop="clickMaxButton()" class="vue-chrome-window__scale" />
-            </div>
+            <div
+              class="vue-chrome-window__navi_bar"
+              @mousedown="dragstart($event)"
+              @mouseup="dragend($event)"
+              @mousemove="dragmove($event)"
+              @mouseout="dragend($event)"
+              @dblclick.self="clickMaxButton()"
+            >
+              <div class="vue-chrome-window__control_buttons">
+                <button @click.stop="clickCloseButton()" class="vue-chrome-window__close" />
+                <button @click.stop="clickMinButton()" class="vue-chrome-window__small" />
+                <button @click.stop="clickMaxButton()" class="vue-chrome-window__scale" />
+              </div>
 
-            <ul
+              <ul
+                v-if="isTab"
+                class="vue-chrome-window__tab_headers"
+              >
+                <li
+                  v-for="(tab, index) in tabs"
+                  :key="tab+index"
+                  :class="{active: activeTab === index}"
+                  :style="{width: isMax ? (100 / this.tabs.length) + 'vw' :tabWidth + 'px'}"
+                  @click="clickTab(index)"
+                >
+                  {{tab}}
+                </li>
+              </ul>
+            </div>
+            <div
               v-if="isTab"
-              class="vue-chrome-window__tab_headers"
+              class="vue-chrome-window__tab_item_wrapper"
+            >
+              <slot name="tabs" :active="active"/>
+            </div>
+            <div v-else>
+              <slot :active="activeTab" />
+            </div>
+            <button
+              v-if="isTabMenu"
+              @click="isDrawerOpen = !isDrawerOpen"
+              class="vue-chrome-window__drower_button"
+            >
+              <span
+                :style="{
+                  transform: isDrawerOpen ?'rotate(90deg)' : 'none'
+                }"
+              >&rtrif;</span>
+            </button>
+            <ul
+              v-if="isDrawerOpen"
+              class="vue-chrome-window__drawer"
             >
               <li
-                v-for="(tab, index) in tabs"
+                v-for="(tab,index) in tabs"
                 :key="tab+index"
-                :class="{active: activeTab === index}"
-                @click="clickTab(index)"
+                @click="clickTabMenu(index)"
               >
                 {{tab}}
               </li>
             </ul>
-          </div>
-          <div
-            v-if="isTab"
-            class="vue-chrome-window__tab_item_wrapper"
-          >
-            <slot name="tabs" :active="active"/>
-          </div>
-          <div v-else>
-            <slot :active="activeTab" />
-          </div>
           </div>
         </div>
         <div
@@ -157,7 +181,68 @@
         items: [],
         isMin: false,
         isMax: false,
+        isDrawerOpen: false,
         activeTab: {},
+      }
+    },
+    props: {
+      value: {
+        type: Boolean,
+        default: false
+      },
+      height: {
+        type: Number,
+        default: 400
+      },
+      width: {
+        type: Number,
+        default: 400
+      },
+      active: {
+        type: Number,
+        required: true,
+        default: 0
+      },
+      top: {
+        type: Number,
+        default: 100
+      },
+      left: {
+        type: Number,
+        default: 100
+      },
+      mode: {
+        type: String,
+        default: ''
+      },
+      tabs: {
+        type: Array,
+        default: () => []
+      }
+    },
+    computed: {
+      tabWidth: function(): number {
+        this.tabs.length
+        const tabArea = this.sizeX - 105 // button width
+        return tabArea / this.tabs.length
+      },
+      isTabMenu: function(): boolean {
+        // min tab width
+        return this.sizeX <= 50 * this.tabs.length + 95
+      }
+    },
+    created() {
+      this.open = this.value
+      this.x = this.top
+      this.y = this.left
+      if(this.mode === 'tab') {
+        this.isTab = true
+        this.activeTab = this.active
+      }
+    },
+    beforeUpdate () {
+      if(this.mode === 'tab') {
+        this.createTabSlots()
       }
     },
     methods: {
@@ -303,66 +388,19 @@
       clickCloseButton() {
         this.open = false
         this.$emit('close')
-      }
-    },
-    props: {
-      value: {
-        type: Boolean,
-        default: false
       },
-      height: {
-        type: Number,
-        default: 400
-      },
-      width: {
-        type: Number,
-        default: 400
-      },
-      active: {
-        type: Number,
-        required: true,
-        default: 0
-      },
-      top: {
-        type: Number,
-        default: 100
-      },
-      left: {
-        type: Number,
-        default: 100
-      },
-      mode: {
-        type: String,
-        default: ''
-      },
-      tabs: {
-        type: Array,
-        default: () => []
+      clickTabMenu(num: number) {
+        this.activeTab = num
       }
     },
     watch: {
       value: function(val: boolean) {
         this.open = val
       }
-    },
-    created() {
-      this.open = this.value
-      this.x = this.top
-      this.y = this.left
-      if(this.mode === 'tab') {
-        this.isTab = true
-        this.activeTab = this.active
-      }
-    },
-    beforeUpdate () {
-      if(this.mode === 'tab') {
-        this.createTabSlots()
-      }
     }
   }
 </script>
 
 <style lang="stylus">
-@import '../styles/variables'
 @import '../styles/window'
 </style>
