@@ -8,31 +8,31 @@
     }"
     @click="isDrawerOpen = false"
   >
-    <div class="vue-chrome-window__flex">
-      <div class="vue-chrome-window__corner_nw"
+    <div class="vue-browserlike-window__flex">
+      <div class="vue-browserlike-window__corner_nw"
         @mousedown="dragstart($event)"
         @mousemove="scale($event, 'nw')"
         @mouseup="dragend($event)"
         @mouseout="dragend($event)"
       />
       <div
-        class="vue-chrome-window__top_bar"
+        class="vue-browserlike-window__top_bar"
         @mousedown="dragstart($event)"
         @mousemove="scale($event, 'n')"
         @mouseup="dragend($event)"
         @mouseout="dragend($event)"
       />
       <div
-        class="vue-chrome-window__corner_ne"
+        class="vue-browserlike-window__corner_ne"
         @mousedown="dragstart($event)"
         @mousemove="scale($event, 'ne')"
         @mouseup="dragend($event)"
         @mouseout="dragend($event)"
       />
     </div>
-    <div class="vue-chrome-window__flex">
+    <div class="vue-browserlike-window__flex">
       <div
-        class="vue-chrome-window__left_bar"
+        class="vue-browserlike-window__left_bar"
         :style="{
           height: sizeY + (isMax ? 'vh': 'px')
         }"
@@ -42,13 +42,13 @@
         @mouseout="dragend($event)"
       />
       <div
-        id="vue-chrome-window"
+        id="vue-browserlike-window"
         :style="{
           background: '#fff'
         }"
       >
           <div
-            id="vue-chrome-window__content"
+            id="vue-browserlike-window__content"
             :style="{
               height: sizeY + (isMax ? 'vh': 'px'),
               width: sizeX + (isMax ? 'vw': 'px'),
@@ -56,22 +56,22 @@
             }"
           >
             <div
-              class="vue-chrome-window__navi_bar"
+              class="vue-browserlike-window__navi_bar"
               @mousedown="dragstart($event)"
               @mouseup="dragend($event)"
               @mousemove="dragmove($event)"
               @mouseout="dragend($event)"
               @dblclick.self="clickMaxButton()"
             >
-              <div class="vue-chrome-window__control_buttons">
-                <button @click.stop="clickCloseButton()" class="vue-chrome-window__close" />
-                <button @click.stop="clickMinButton()" class="vue-chrome-window__small" />
-                <button @click.stop="clickMaxButton()" class="vue-chrome-window__scale" />
+              <div class="vue-browserlike-window__control_buttons">
+                <button @click.stop="clickCloseButton()" class="vue-browserlike-window__close" />
+                <button @click.stop="clickMinButton()" class="vue-browserlike-window__small" />
+                <button @click.stop="clickMaxButton()" class="vue-browserlike-window__scale" />
               </div>
 
               <ul
                 v-if="isTab"
-                class="vue-chrome-window__tab_headers"
+                class="vue-browserlike-window__tab_headers"
               >
                 <li
                   v-for="(tab, index) in tabHeaders"
@@ -84,7 +84,7 @@
                   @dragend="tabDragEnd($event, index)"
                 >
                   <p
-                    class="vue-chrome-window__hendle"
+                    class="vue-browserlike-window__hendle"
                     :data-tab-index="index"
                     @mousedown="tabDragStart($event, index)"
                   >
@@ -92,13 +92,13 @@
                     <span/>
                     <span/>
                   </p>
-                  <p class="vue-chrome-window__tab_name">{{tab.name}}</p>
+                  <p class="vue-browserlike-window__tab_name">{{tab.name}}</p>
                 </li>
               </ul>
             </div>
             <div
               v-if="isTab"
-              class="vue-chrome-window__tab_item_wrapper"
+              class="vue-browserlike-window__tab_item_wrapper"
             >
               <slot name="tabs" :active="active"/>
             </div>
@@ -108,7 +108,7 @@
             <button
               v-if="isTabMenu"
               @click="toggleDrower($event)"
-              class="vue-chrome-window__drower_button"
+              class="vue-browserlike-window__drower_button"
             >
               <span
                 :style="{
@@ -118,7 +118,7 @@
             </button>
             <ul
               v-if="isDrawerOpen"
-              class="vue-chrome-window__drawer"
+              class="vue-browserlike-window__drawer"
             >
               <li
                 v-for="(tab,index) in tabHeaders"
@@ -131,7 +131,7 @@
           </div>
         </div>
         <div
-          class="vue-chrome-window__right_bar"
+          class="vue-browserlike-window__right_bar"
           :style="{
             height: sizeY + (isMax ? 'vh': 'px')
           }"
@@ -141,9 +141,9 @@
           @mouseout="dragend($event)"
         />
     </div>
-    <div class="vue-chrome-window__flex">
+    <div class="vue-browserlike-window__flex">
       <div 
-        class="vue-chrome-window__corner_sw"
+        class="vue-browserlike-window__corner_sw"
         @mousedown="dragstart($event)"
         @mousemove="scale($event, 'sw')"
         @mouseup="dragend($event)"
@@ -154,10 +154,10 @@
         @mousemove="scale($event, 's')"
         @mouseup="dragend($event)"
         @mouseout="dragend($event)"
-        class="vue-chrome-window__under_bar"
+        class="vue-browserlike-window__under_bar"
       />
       <div
-        class="vue-chrome-window__corner_se"
+        class="vue-browserlike-window__corner_se"
         @mousedown="dragstart($event)"
         @mousemove="scale($event, 'se')"
         @mouseup="dragend($event)"
@@ -353,7 +353,7 @@
         if(this.mode === 'tab' && !this.$slots.tabs) {
           let index = 0
           const slots = this.$slots.default.filter((slot: VNode) => {
-            if(slot.tag && slot.tag.match(/vue-chrome-window-item/g)) {
+            if(slot.tag && slot.tag.match(/vue-browserlike-window-item/g)) {
               slot.componentOptions.propsData = {index}
               index++
               return slot

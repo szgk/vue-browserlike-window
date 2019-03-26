@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import App from './app.vue'
-import VueChromeWindow from '..'
+import VuebrowserlikeWindow from '..'
 
-Vue.use(VueChromeWindow)
+Vue.use(VuebrowserlikeWindow)
 
 window.onload = function () {new Vue({
   data: { a: 'hello' },

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="vue-chrome-window-item"
+    class="vue-browserlike-window-item"
     v-if="open"
   >
     <slot/>
@@ -11,7 +11,7 @@
   import Vue from 'vue'
 
   export default {
-    name: 'vue-chrome-window-item',
+    name: 'vue-browserlike-window-item',
     data() {
       return {}
     },

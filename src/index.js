@@ -1,9 +1,9 @@
-import chromeWindow from '@/components/vue-chrome-window.vue'
-import chromeWindowItem from '@/components/vue-chrome-window-item.vue'
+import browserlikeWindow from '@/components/vue-browserlike-window.vue'
+import browserlikeWindowItem from '@/components/vue-browserlike-window-item.vue'
 
 export default {
   install (Vue, options) {
-    Vue.component('v-chrome-window', chromeWindow),
-    Vue.component('v-chrome-window-item', chromeWindowItem)
+    Vue.component('vb-window', browserlikeWindow),
+    Vue.component('vb-window-item', browserlikeWindowItem)
   }
 }
