@@ -6,6 +6,7 @@
       transform: `translate(${x}px, ${y}px)`,
       background: '#fff'
     }"
+    @click="isDrawerOpen = false"
   >
     <div class="vue-chrome-window__flex">
       <div class="vue-chrome-window__corner_nw"
@@ -73,13 +74,25 @@
                 class="vue-chrome-window__tab_headers"
               >
                 <li
-                  v-for="(tab, index) in tabs"
+                  v-for="(tab, index) in tabHeaders"
                   :key="tab+index"
                   :class="{active: activeTab === index}"
-                  :style="{width: isMax ? (100 / this.tabs.length) + 'vw' :tabWidth + 'px'}"
+                  :style="{width: isMax ? (100 / tabHeaders.length) + 'vw' :tabWidth + 'px'}"
+                  :draggable="tabDraggable"
                   @click="clickTab(index)"
+                  @dragover="tabDragOver($event, index)"
+                  @dragend="tabDragEnd($event, index)"
                 >
-                  {{tab}}
+                  <p
+                    class="vue-chrome-window__hendle"
+                    :data-tab-index="index"
+                    @mousedown="tabDragStart($event, index)"
+                  >
+                    <span/>
+                    <span/>
+                    <span/>
+                  </p>
+                  <p class="vue-chrome-window__tab_name">{{tab.name}}</p>
                 </li>
               </ul>
             </div>
@@ -94,7 +107,7 @@
             </div>
             <button
               v-if="isTabMenu"
-              @click="isDrawerOpen = !isDrawerOpen"
+              @click="toggleDrower($event)"
               class="vue-chrome-window__drower_button"
             >
               <span
@@ -108,11 +121,11 @@
               class="vue-chrome-window__drawer"
             >
               <li
-                v-for="(tab,index) in tabs"
+                v-for="(tab,index) in tabHeaders"
                 :key="tab+index"
                 @click="clickTabMenu(index)"
               >
-                {{tab}}
+                {{tab.name}}
               </li>
             </ul>
           </div>
@@ -165,6 +178,11 @@
         startPositoin: {},
         startSize: {},
         draggable: false,
+        tabDraggable: false,
+        activeTab: 0,
+        activeContent: 0,
+        beforeTab: 0,
+        currentTab: 0,
         resizable: true,
         x: 0,
         y: 0,
@@ -182,7 +200,7 @@
         isMin: false,
         isMax: false,
         isDrawerOpen: false,
-        activeTab: {},
+        tabHeaders: []
       }
     },
     props: {
@@ -222,28 +240,31 @@
     },
     computed: {
       tabWidth: function(): number {
-        this.tabs.length
+        this.tabHeaders.length
         const tabArea = this.sizeX - 105 // button width
-        return tabArea / this.tabs.length
+        return tabArea / this.tabHeaders.length
       },
       isTabMenu: function(): boolean {
         // min tab width
-        return this.sizeX <= 50 * this.tabs.length + 95
+        return this.sizeX <= 50 * this.tabHeaders.length + 95
       }
     },
     created() {
       this.open = this.value
+      this.tabHeaders = this.tabs.map((tabName, index) => ({
+        name: tabName,
+        content: index
+      }))
       this.x = this.top
       this.y = this.left
       if(this.mode === 'tab') {
         this.isTab = true
         this.activeTab = this.active
       }
+      this.createTabSlots()
     },
     beforeUpdate () {
-      if(this.mode === 'tab') {
-        this.createTabSlots()
-      }
+      this.createTabSlots()
     },
     methods: {
       dragstart: function(e) {
@@ -329,15 +350,30 @@
         return { x: x - startX, y: y - startY }
       },
       createTabSlots: function() {
-        let index = 0
-        const slots = this.$slots.default.filter((slot: VNode) => {
-          if(slot.tag && slot.tag.match(/vue-chrome-window-item/g)) {
-            slot.componentOptions.propsData = {index}
-            index++
-            return slot
-          }
-        })
-        this.$slots.tabs = slots
+        if(this.mode === 'tab' && !this.$slots.tabs) {
+          let index = 0
+          const slots = this.$slots.default.filter((slot: VNode) => {
+            if(slot.tag && slot.tag.match(/vue-chrome-window-item/g)) {
+              slot.componentOptions.propsData = {index}
+              index++
+              return slot
+            }
+          })
+          this.$slots.tabs = slots
+        }
+      },
+      tabDragStart: function(e, index) {
+        this.tabDraggable = true
+        this.beforaTab = index
+      },
+      tabDragOver: function(e, index) {
+        this.currentTab = index
+      },
+      tabDragEnd: function(e, index) {
+        this.tabDraggable = false
+        this.tabHeaders[this.beforaTab] = [this.tabHeaders[this.currentTab], this.tabHeaders[this.currentTab] = this.tabHeaders[this.beforaTab]][0]
+        this.activeTab = this.currentTab
+        this.activeContent = this.tabHeaders[this.currentTab].content
       },
       clickTab: function(num: number) {
         this.activeTab = num
@@ -389,8 +425,14 @@
         this.open = false
         this.$emit('close')
       },
-      clickTabMenu(num: number) {
-        this.activeTab = num
+      clickTabMenu(index: number) {
+        this.activeTab = index
+        this.activeContent = index
+        this.isDrawerOpen = false
+      },
+      toggleDrower($event: MouseEvent) {
+        this.isDrawerOpen = !this.isDrawerOpen
+        $event.stopPropagation()
       }
     },
     watch: {

@@ -16,11 +16,9 @@
       return {}
     },
     computed: {
-      active: function (): number {
-        return this.$parent['activeTab']
-      },
       open(): boolean {
-        return this.index === this.active
+        console.log(this.$parent['activeContent'])
+        return this.index === this.$parent['activeContent']
       }
     },
     props: {
