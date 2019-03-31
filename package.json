@@ -15,12 +15,9 @@
     "vue": "^2.6.9"
   },
   "devDependencies": {
-    "@types/vue": "^2.0.0",
     "css-loader": "^2.1.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
-    "ts-loader": "^5.3.3",
-    "typescript": "^3.3.3333",
     "vue-loader": "^14.2.4",
     "vue-template-compiler": "^2.6.9",
     "webpack": "^4.29.6",

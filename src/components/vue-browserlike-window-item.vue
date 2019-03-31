@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
   import Vue from 'vue'
 
   export default {
@@ -16,8 +16,7 @@
       return {}
     },
     computed: {
-      open(): boolean {
-        console.log(this.$parent['activeContent'])
+      open() {
         return this.index === this.$parent['activeContent']
       }
     },

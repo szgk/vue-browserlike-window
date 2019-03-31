@@ -1,41 +1,25 @@
 const path = require('path');
-// const VueLoaderPlugin = require('vue-loader/lib/plugin')
-// Error: Cannot find module 'webpack/lib/RuleSet'
-// https://github.com/vuejs/vue-loader/issues/1427
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
-  entry:{main: './sample/main.ts'},
+  entry:{
+    'sample/sample': './sample/main.js'
+  },
+  output: {
+    path: __dirname
+  },
   devServer: {
     port: 3333,
-    contentBase: path.resolve(__dirname, 'dist'),
+    contentBase: path.resolve(__dirname, 'sample'),
     host: 'localhost',
     hot: true
   },
   module: {
     rules: [
       {
-        test: /\.ts$/,
-        loader: 'ts-loader',
-        options: {
-          appendTsSuffixTo: [/\.vue$/]
-        },
-        exclude: /node_modules/
-      },
-      {
         test: /\.vue$/,
         loader: 'vue-loader',
-        exclude: /node_modules/,
-        options: {
-          loaders: {
-            ts: [{
-              loader: 'ts-loader',
-                options: {
-                appendTsSuffixTo: [/\.vue$/]
-              }
-            }]
-          },
-        }
+        exclude: /node_modules/
       }
     ]
   },
@@ -43,7 +27,7 @@ module.exports = {
   //   new VueLoaderPlugin()
   // ],
   resolve: {
-    extensions: ['.ts', '.js', '.vue', '.sss'],
+    extensions: ['.js', '.vue'],
     alias: {
       '@': path.resolve(__dirname, './src/')
     }

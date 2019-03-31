@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import App from './app.vue'
-import VuebrowserlikeWindow from '..'
+import VBWindow from '../src'
 
-Vue.use(VuebrowserlikeWindow)
+Vue.use(VBWindow)
 
 window.onload = function () {new Vue({
   data: { a: 'hello' },

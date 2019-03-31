@@ -167,9 +167,8 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
   import Vue, {VNode} from 'vue'
-  type Direction = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw'
 
   export default {
     data () {
@@ -239,15 +238,15 @@
       }
     },
     computed: {
-      tabWidth: function(): number {
+      tabWidth: function() {
         this.tabHeaders.length
         const tabArea = this.sizeX - 105 // button width
         return tabArea / this.tabHeaders.length
       },
-      isTabMenu: function(): boolean {
+      isTabMenu: function() {
         // min tab width
         return this.sizeX <= 50 * this.tabHeaders.length + 95
-      }
+      },
     },
     created() {
       this.open = this.value
@@ -295,7 +294,7 @@
         this.x = this.startPosition.x + move.x
         this.y = this.startPosition.y + move.y
       },
-      scale: function(e: MouseEvent, direction: Direction) {
+      scale: function(e, direction) {
         if (!this.draggable || !this.resizable) return
         const move = this.getMove(e.pageX, e.pageY)
         const minWidth = 120
@@ -352,7 +351,7 @@
       createTabSlots: function() {
         if(this.mode === 'tab' && !this.$slots.tabs) {
           let index = 0
-          const slots = this.$slots.default.filter((slot: VNode) => {
+          const slots = this.$slots.default.filter((slot) => {
             if(slot.tag && slot.tag.match(/vue-browserlike-window-item/g)) {
               slot.componentOptions.propsData = {index}
               index++
@@ -375,7 +374,7 @@
         this.activeTab = this.currentTab
         this.activeContent = this.tabHeaders[this.currentTab].content
       },
-      clickTab: function(num: number) {
+      clickTab: function(num) {
         this.activeTab = num
       },
       caching() {
@@ -425,18 +424,18 @@
         this.open = false
         this.$emit('close')
       },
-      clickTabMenu(index: number) {
+      clickTabMenu(index) {
         this.activeTab = index
         this.activeContent = index
         this.isDrawerOpen = false
       },
-      toggleDrower($event: MouseEvent) {
+      toggleDrower($event) {
         this.isDrawerOpen = !this.isDrawerOpen
         $event.stopPropagation()
       }
     },
     watch: {
-      value: function(val: boolean) {
+      value: function(val) {
         this.open = val
       }
     }
