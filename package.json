@@ -5,6 +5,10 @@
   "main": "src/index.js",
   "author": "szgk",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:szgk/vue-browserlike-window.git"
+  },
   "scripts": {
     "dev": "webpack --mode development --display-error-details",
     "build": "webpack --mode production --display-error-details",
