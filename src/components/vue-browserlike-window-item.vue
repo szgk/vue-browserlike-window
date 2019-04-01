@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: 'VueBrowserlikeWindowItem',
+  name: 'VbWindowItem',
   props: {
     index: {
       type: Number,
@@ -21,11 +21,9 @@ export default {
   },
   computed: {
     open () {
+      console.log(this.$parent['activeContent'])
       return this.index === this.$parent['activeContent']
     }
   }
 }
 </script>
-
-<style lang="stylus">
-</style>

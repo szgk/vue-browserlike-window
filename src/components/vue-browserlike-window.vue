@@ -8,177 +8,159 @@
     }"
     @click="isDrawerOpen = false"
   >
-    <div class="vue-browserlike-window__flex">
+    <div
+      class="vue-browserlike-window__corner_nw"
+      @mousedown="dragstart($event)"
+      @mousemove="scale($event, 'nw')"
+      @mouseup="dragend($event)"
+      @mouseout="dragend($event)"
+    />
+    <div
+      class="vue-browserlike-window__top_bar"
+      @mousedown="dragstart($event)"
+      @mousemove="scale($event, 'n')"
+      @mouseup="dragend($event)"
+      @mouseout="dragend($event)"
+    />
+    <div
+      class="vue-browserlike-window__corner_ne"
+      @mousedown="dragstart($event)"
+      @mousemove="scale($event, 'ne')"
+      @mouseup="dragend($event)"
+      @mouseout="dragend($event)"
+    />
+    <div
+      id="vue-browserlike-window"
+      :style="{
+        height: sizeY + (isMax ? 'vh': 'px'),
+        width: sizeX + (isMax ? 'vw': 'px'),
+        margin: '0 auto',
+        background: '#fff'
+      }"
+    >
       <div
-        class="vue-browserlike-window__corner_nw"
+        class="vue-browserlike-window__navi_bar"
         @mousedown="dragstart($event)"
-        @mousemove="scale($event, 'nw')"
         @mouseup="dragend($event)"
+        @mousemove="dragmove($event)"
         @mouseout="dragend($event)"
-      />
-      <div
-        class="vue-browserlike-window__top_bar"
-        @mousedown="dragstart($event)"
-        @mousemove="scale($event, 'n')"
-        @mouseup="dragend($event)"
-        @mouseout="dragend($event)"
-      />
-      <div
-        class="vue-browserlike-window__corner_ne"
-        @mousedown="dragstart($event)"
-        @mousemove="scale($event, 'ne')"
-        @mouseup="dragend($event)"
-        @mouseout="dragend($event)"
-      />
-    </div>
-    <div class="vue-browserlike-window__flex">
-      <div
-        class="vue-browserlike-window__left_bar"
-        :style="{
-          height: sizeY + (isMax ? 'vh': 'px')
-        }"
-        @mousedown="dragstart($event)"
-        @mousemove="scale($event, 'w')"
-        @mouseup="dragend($event)"
-        @mouseout="dragend($event)"
-      />
-      <div
-        id="vue-browserlike-window"
-        :style="{
-          background: '#fff'
-        }"
+        @dblclick.self="clickMaxButton()"
       >
-        <div
-          id="vue-browserlike-window__content"
-          :style="{
-            height: sizeY + (isMax ? 'vh': 'px'),
-            width: sizeX + (isMax ? 'vw': 'px'),
-            margin: '0 auto'
-          }"
-        >
-          <div
-            class="vue-browserlike-window__navi_bar"
-            @mousedown="dragstart($event)"
-            @mouseup="dragend($event)"
-            @mousemove="dragmove($event)"
-            @mouseout="dragend($event)"
-            @dblclick.self="clickMaxButton()"
-          >
-            <div class="vue-browserlike-window__control_buttons">
-              <button
-                class="vue-browserlike-window__close"
-                @click.stop="clickCloseButton()"
-              />
-              <button
-                class="vue-browserlike-window__small"
-                @click.stop="clickMinButton()"
-              />
-              <button
-                class="vue-browserlike-window__scale"
-                @click.stop="clickMaxButton()"
-              />
-            </div>
-
-            <ul
-              v-if="isTab"
-              class="vue-browserlike-window__tab_headers"
-            >
-              <li
-                v-for="(tab, index) in tabHeaders"
-                :key="tab+index"
-                :class="{active: activeTab === index}"
-                :style="{width: isMax ? (100 / tabHeaders.length) + 'vw' :tabWidth + 'px'}"
-                :draggable="tabDraggable"
-                @click="clickTab(index)"
-                @dragover="tabDragOver($event, index)"
-                @dragend="tabDragEnd($event, index)"
-              >
-                <p
-                  class="vue-browserlike-window__hendle"
-                  :data-tab-index="index"
-                  @mousedown="tabDragStart($event, index)"
-                >
-                  <span />
-                  <span />
-                  <span />
-                </p>
-                <p class="vue-browserlike-window__tab_name">
-                  {{ tab.name }}
-                </p>
-              </li>
-            </ul>
-          </div>
-          <div
-            v-if="isTab"
-            class="vue-browserlike-window__tab_item_wrapper"
-          >
-            <slot
-              name="tabs"
-              :active="active"
-            />
-          </div>
-          <div v-else>
-            <slot :active="activeTab" />
-          </div>
+        <div class="vue-browserlike-window__control_buttons">
           <button
-            v-if="isTabMenu"
-            class="vue-browserlike-window__drower_button"
-            @click="toggleDrower($event)"
-          >
-            <span
-              :style="{
-                transform: isDrawerOpen ?'rotate(90deg)' : 'none'
-              }"
-            >&rtrif;</span>
-          </button>
-          <ul
-            v-if="isDrawerOpen"
-            class="vue-browserlike-window__drawer"
-          >
-            <li
-              v-for="(tab,index) in tabHeaders"
-              :key="tab+index"
-              @click="clickTabMenu(index)"
-            >
-              {{ tab.name }}
-            </li>
-          </ul>
+            class="vue-browserlike-window__close"
+            @click.stop="clickCloseButton()"
+          />
+          <button
+            class="vue-browserlike-window__small"
+            @click.stop="clickMinButton()"
+          />
+          <button
+            class="vue-browserlike-window__scale"
+            @click.stop="clickMaxButton()"
+          />
         </div>
+
+        <ul
+          v-if="isTab"
+          class="vue-browserlike-window__tab_headers"
+        >
+          <li
+            v-for="(tab, index) in tabHeaders"
+            :key="tab+index"
+            :class="{active: activeTab === index}"
+            :style="{width: isMax ? (100 / tabHeaders.length) + 'vw' :tabWidth + 'px'}"
+            :draggable="tabDraggable"
+            @click="clickTabMenu(index)"
+            @dragover="tabDragOver($event, index)"
+            @dragend="tabDragEnd($event, index)"
+          >
+            <p
+              class="vue-browserlike-window__hendle"
+              :data-tab-index="index"
+              @mousedown="tabDragStart($event, index)"
+            >
+              <span />
+              <span />
+              <span />
+            </p>
+            <p class="vue-browserlike-window__tab_name">
+              {{ tab.name }}
+            </p>
+          </li>
+        </ul>
+        <button
+          v-if="isTabMenu"
+          class="vue-browserlike-window__drower_button"
+          @click="toggleDrower($event)"
+        >
+          <span
+            :style="{
+              transform: isDrawerOpen ?'rotate(90deg)' : 'none'
+            }"
+          >&rtrif;</span>
+        </button>
+        <ul
+          v-if="isDrawerOpen"
+          class="vue-browserlike-window__drawer"
+        >
+          <li
+            v-for="(tab,index) in tabHeaders"
+            :key="tab+index"
+            @click="clickTabMenu(index)"
+          >
+            {{ tab.name }}
+          </li>
+        </ul>
       </div>
-      <div
-        class="vue-browserlike-window__right_bar"
-        :style="{
-          height: sizeY + (isMax ? 'vh': 'px')
-        }"
-        @mousedown="dragstart($event)"
-        @mousemove="scale($event, 'e')"
-        @mouseup="dragend($event)"
-        @mouseout="dragend($event)"
-      />
+      <div v-if="isTab">
+        <slot name="tabs" />
+      </div>
+      <div v-else>
+        <slot />
+      </div>
     </div>
-    <div class="vue-browserlike-window__flex">
-      <div
-        class="vue-browserlike-window__corner_sw"
-        @mousedown="dragstart($event)"
-        @mousemove="scale($event, 'sw')"
-        @mouseup="dragend($event)"
-        @mouseout="dragend($event)"
-      />
-      <div
-        class="vue-browserlike-window__under_bar"
-        @mousedown="dragstart($event)"
-        @mousemove="scale($event, 's')"
-        @mouseup="dragend($event)"
-        @mouseout="dragend($event)"
-      />
-      <div
-        class="vue-browserlike-window__corner_se"
-        @mousedown="dragstart($event)"
-        @mousemove="scale($event, 'se')"
-        @mouseup="dragend($event)"
-        @mouseout="dragend($event)"
-      />
-    </div>
+    <div
+      class="vue-browserlike-window__left_bar"
+      :style="{
+        height: sizeY + (isMax ? 'vh': 'px')
+      }"
+      @mousedown="dragstart($event)"
+      @mousemove="scale($event, 'w')"
+      @mouseup="dragend($event)"
+      @mouseout="dragend($event)"
+    />
+    <div
+      class="vue-browserlike-window__right_bar"
+      :style="{
+        height: sizeY + (isMax ? 'vh': 'px')
+      }"
+      @mousedown="dragstart($event)"
+      @mousemove="scale($event, 'e')"
+      @mouseup="dragend($event)"
+      @mouseout="dragend($event)"
+    />
+    <div
+      class="vue-browserlike-window__corner_sw"
+      @mousedown="dragstart($event)"
+      @mousemove="scale($event, 'sw')"
+      @mouseup="dragend($event)"
+      @mouseout="dragend($event)"
+    />
+    <div
+      class="vue-browserlike-window__under_bar"
+      @mousedown="dragstart($event)"
+      @mousemove="scale($event, 's')"
+      @mouseup="dragend($event)"
+      @mouseout="dragend($event)"
+    />
+    <div
+      class="vue-browserlike-window__corner_se"
+      @mousedown="dragstart($event)"
+      @mousemove="scale($event, 'se')"
+      @mouseup="dragend($event)"
+      @mouseout="dragend($event)"
+    />
   </div>
 </template>
 
@@ -364,13 +346,14 @@ export default {
       if (this.mode === 'tab' && !this.$slots.tabs) {
         let index = 0
         const slots = this.$slots.default.filter(slot => {
-          if (slot.tag && slot.tag.match(/vue-browserlike-window-item/g)) {
+          if (slot.tag && slot.tag.match(/VbWindowItem/g)) {
             slot.componentOptions.propsData = { index }
             index++
             return slot
           }
         })
         this.$slots.tabs = slots
+        console.log(this)
       }
     },
     tabDragStart: function (e, index) {
@@ -388,9 +371,6 @@ export default {
       ][0]
       this.activeTab = this.currentTab
       this.activeContent = this.tabHeaders[this.currentTab].content
-    },
-    clickTab: function (num) {
-      this.activeTab = num
     },
     caching () {
       this.cache.width = this.sizeX
