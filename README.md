@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/szgk/vue-browserlike-window.svg?style=svg)](https://circleci.com/gh/szgk/vue-browserlike-window)
+
 # Vue BrowserLike Window
 Draggable and Resizable UI like browser.
 
