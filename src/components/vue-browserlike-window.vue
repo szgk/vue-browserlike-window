@@ -353,7 +353,6 @@ export default {
           }
         })
         this.$slots.tabs = slots
-        console.log(this)
       }
     },
     tabDragStart: function (e, index) {

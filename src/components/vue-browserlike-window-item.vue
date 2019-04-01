@@ -21,7 +21,6 @@ export default {
   },
   computed: {
     open () {
-      console.log(this.$parent['activeContent'])
       return this.index === this.$parent['activeContent']
     }
   }
