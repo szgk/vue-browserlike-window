@@ -9,6 +9,7 @@
     "type": "git",
     "url": "https://github.com/szgk/vue-browserlike-window.git"
   },
+  "keywords": ["vue", "ui", "window", "draggable", "resizable"],
   "scripts": {
     "dev": "webpack --mode development --display-error-details",
     "build": "webpack --mode production --display-error-details",
