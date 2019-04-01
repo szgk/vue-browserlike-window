@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "webpack --mode development --display-error-details",
-    "prod": "webpack --mode production --display-error-details",
+    "build": "webpack --mode production --display-error-details",
     "watch": "webpack -w",
     "serve": "webpack-dev-server"
   },

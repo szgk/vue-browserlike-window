@@ -426,7 +426,7 @@
       },
       clickTabMenu(index) {
         this.activeTab = index
-        this.activeContent = index
+        this.activeContent = this.tabHeaders[this.activeTab].content
         this.isDrawerOpen = false
       },
       toggleDrower($event) {
