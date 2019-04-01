@@ -1,32 +1,30 @@
 <template>
   <div
-    class="vue-browserlike-window-item"
     v-if="open"
+    class="vue-browserlike-window-item"
   >
-    <slot/>
+    <slot />
   </div>
 </template>
 
 <script>
-  import Vue from 'vue'
-
-  export default {
-    name: 'vue-browserlike-window-item',
-    data() {
-      return {}
-    },
-    computed: {
-      open() {
-        return this.index === this.$parent['activeContent']
-      }
-    },
-    props: {
-      index: {
-        type: Number,
-        required: true
-      }
+export default {
+  name: 'VueBrowserlikeWindowItem',
+  props: {
+    index: {
+      type: Number,
+      required: true
+    }
+  },
+  data () {
+    return {}
+  },
+  computed: {
+    open () {
+      return this.index === this.$parent['activeContent']
     }
   }
+}
 </script>
 
 <style lang="stylus">
