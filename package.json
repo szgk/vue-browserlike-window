@@ -1,6 +1,6 @@
 {
   "name": "vue-browserlike-window",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "vue draggable and resizable window",
   "main": "src/index.js",
   "author": "szgk",
