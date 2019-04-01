@@ -1,25 +1,29 @@
 {
   "name": "vue-browserlike-window",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "vue draggable and resizable window",
   "main": "src/index.js",
   "author": "szgk",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com:szgk/vue-browserlike-window.git"
+    "url": "https://github.com/szgk/vue-browserlike-window.git"
   },
   "scripts": {
     "dev": "webpack --mode development --display-error-details",
     "build": "webpack --mode production --display-error-details",
     "watch": "webpack -w",
-    "serve": "webpack-dev-server"
+    "serve": "webpack-dev-server",
+    "lint": "eslint src/**/*.vue src/**/*.js"
   },
   "dependencies": {
+    "eslint-plugin-vue": "^5.2.2",
     "vue": "^2.6.9"
   },
   "devDependencies": {
     "css-loader": "^2.1.1",
+    "eslint": "^5.16.0",
+    "eslint-config-vue": "^2.0.2",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "vue-loader": "^14.2.4",
