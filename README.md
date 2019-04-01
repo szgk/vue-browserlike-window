@@ -1,6 +1,8 @@
 # Vue BrowserLike Window
 Draggable and Resizable UI like browser.
 
+![demo](./demo.gif "vue-browserlike-window")
+
 ## How to use
 - main.js
 ```javascript
