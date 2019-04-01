@@ -4,9 +4,16 @@ Draggable and Resizable UI like browser.
 ![demo](./demo.gif "vue-browserlike-window")
 
 ## How to use
+
+- install
+```
+npm i -D vue-browserlike-window
+yarn add  -D vue-browserlike-window
+```
+
 - main.js
 ```javascript
-import VBWindow from '../src'
+import VBWindow from 'vue-browserlike-window'
 
 Vue.use(VBWindow)
 ```
