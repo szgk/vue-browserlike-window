@@ -2,11 +2,9 @@ const path = require('path')
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
-  entry: {
-    'dist/index': './src/index.js'
-  },
+  entry: './src/index.js',
   output: {
-    path: __dirname,
+    path: path.resolve(__dirname, 'dist'),
     library: 'vue-browserlike-window',
     libraryTarget: 'umd',
     globalObject: 'this'
