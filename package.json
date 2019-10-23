@@ -1,6 +1,6 @@
 {
   "name": "vue-browserlike-window",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "vue draggable and resizable window",
   "main": "dist/index.js",
   "author": "szgk",
@@ -17,10 +17,9 @@
     "resizable"
   ],
   "scripts": {
-    "dev": "webpack --mode development --config ./webpack.build.config.js --display-error-details",
     "build": "yarn build:package && yarn build:sample",
-    "build:package": "webpack --mode production ./webpack.build.config.js --display-error-details",
-    "build:sample": "webpack --mode production  ./webpack.sample.config.js --display-error-details",
+    "build:package": "webpack --mode production --config ./webpack.build.config.js --display-error-details",
+    "build:sample": "webpack --mode production --config ./webpack.sample.config.js --display-error-details",
     "build:package:watch": "webpack --mode production ./webpack.build.config.js --display-error-details --watch",
     "build:sample:watch": "webpack --mode production ./webpack.sample.config.js --display-error-details --watch",
     "serve": "cd ./sample && serve -p 3333",

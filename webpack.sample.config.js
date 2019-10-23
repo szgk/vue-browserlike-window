@@ -2,10 +2,9 @@ const path = require('path')
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
-  entry: {
-    'sample/sample': './sample/main.js'
-  },
+  entry: './sample/main.js',
   output: {
+    filename: 'sample/sample',
     path: __dirname
   },
   module: {
