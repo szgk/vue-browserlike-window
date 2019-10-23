@@ -3,16 +3,13 @@ const path = require('path')
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
   entry: {
-    'sample/sample': './sample/main.js'
+    'dist/index': './src/index.js'
   },
   output: {
-    path: __dirname
-  },
-  devServer: {
-    port: 3333,
-    contentBase: path.resolve(__dirname, 'sample'),
-    host: 'localhost',
-    hot: true
+    path: __dirname,
+    library: 'vue-browserlike-window',
+    libraryTarget: 'umd',
+    globalObject: 'this'
   },
   module: {
     rules: [
@@ -23,9 +20,6 @@ module.exports = {
       }
     ]
   },
-  // plugins: [
-  //   new VueLoaderPlugin()
-  // ],
   resolve: {
     extensions: ['.js', '.vue'],
     alias: {

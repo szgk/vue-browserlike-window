@@ -17,9 +17,12 @@
     "resizable"
   ],
   "scripts": {
-    "dev": "webpack --mode development --display-error-details",
-    "build": "webpack --mode production --display-error-details",
-    "watch": "webpack -w",
+    "dev": "webpack --mode development --config ./webpack.build.config.js --display-error-details",
+    "build": "yarn build:package && yarn build:sample",
+    "build:package": "webpack --mode production ./webpack.build.config.js --display-error-details",
+    "build:sample": "webpack --mode production  ./webpack.sample.config.js --display-error-details",
+    "build:package:watch": "webpack --mode production ./webpack.build.config.js --display-error-details --watch",
+    "build:sample:watch": "webpack --mode production ./webpack.sample.config.js --display-error-details --watch",
     "serve": "webpack-dev-server",
     "lint": "eslint src/**/*.vue src/**/*.js"
   },

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './app.vue'
-import VBWindow from '../src'
+import VBWindow from '../dist'
 
 Vue.use(VBWindow)
 
